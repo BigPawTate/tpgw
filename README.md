@@ -18,5 +18,5 @@ _a simple website (93KB) to generate a passphrase and copy it to the clipboard o
 - add custom words
 - make better passwords
 - words sourced from the EFF's Large Password List
-  - [https://www.eff.org/document/passphrase-wordlists](https://www.eff.org/document/passphrase-wordlists)
-  - Support the EFF:  [https://supporters.eff.org/donate](https://supporters.eff.org/donate)
+  - <a href="https://www.eff.org/document/passphrase-wordlists" target="_blank">https://www.eff.org/document/passphrase-wordlists</a>
+  - Support the EFF:  <a href="https://supporters.eff.org/donate" target="_blank">https://supporters.eff.org/donate</a>
