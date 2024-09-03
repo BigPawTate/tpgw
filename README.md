@@ -1,7 +1,8 @@
 # The Passphrase Generator Website
-_a simple website (88KB) to generate a passphrase and copy it to the clipboard of your device_
+_a simple website (93KB) to generate a passphrase and copy it to the clipboard of your device_
 ***
-![image](https://github.com/BigPawTate/tpgw/assets/116862308/a2dbf6d7-0880-4c8d-aab7-7490ab251adc)
+![image](https://github.com/user-attachments/assets/55359543-dbe9-4130-83c2-5f9bbe6dd86b)
+
 
 ### Features:
 - One or more words! 🔢
