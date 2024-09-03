@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>It's the Passphrase Generator Website:  🍕 Edition</title>
+<style>
+  /* General styling for the body */
+  body {
+    background-color: #000000;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif; /* Use system fonts */
+    text-align: center;
+    padding: 20px;
+  }
+
+  /* Styling for the main title */
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  /* Styling for the container that holds the generated passphrase */
+  #passphrase-container {
+    margin: 20px;
+    padding: 5px;
+    background-color: #1c1c1c;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Styling for the passphrase display area */
+  #passphrase {
+    font-size: 1.5em;
+    padding: 5px;
+    border: 3px solid #444;
+    border-radius: 5px;
+    margin-top: 15px;
+    background-color: #333;
+    word-wrap: break-word; /* Ensures long words or sequences break and wrap */
+    overflow-wrap: break-word; /* Additional wrapping control */
+    white-space: normal; /* Allows text to wrap normally */
+  }
+
+  /* Styling for the confirmation message after copying to clipboard */
+  #copy-confirmation {
+    color: #00ff00;
+    font-weight: bold;
+    display: none; /* Hidden by default, shown after copying */
+  }
+
+  /* Styling for buttons */
+  button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 15px; /* Increase padding */
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    font-size: 1.2em; /* Increase font size */
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  /* Button hover effect */
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  /* Styling for input fields (number and text) */
+  input[type="number"],
+  input[type="text"] {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding: 1px; /* Increase padding for better touch area */
+    font-size: 1em; /* Increase font size */
+    border-radius: 5px;
+    border: 2px solid #555;
+    background-color: #222;
+    color: #e0e0e0;
+    width: 50%; /* Adjust this value to decrease the width */
+    max-width: 69px; /* Set a max-width to limit the size */
+  }
+
+  /* Styling for checkbox input */
+  input[type="checkbox"] {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding: 5px;
+    font-size: 1.2em; /* Increase font size */
+    border-radius: 5px;
+    border: 2px solid #555;
+    background-color: #222;
+    color: #e0e0e0;
+  }
+</style>
+</head>
+<body onload="generatePassphrase()"> <!-- Automatically generate a passphrase on page load -->
+<h1>It's the Passphrase Generator Website:<br/>🍕 Edition</h1>
+<button onclick="resetForm()" aria-label="Reset the Generator">Reset the 🍕 Generator</button> <!-- Button to reset the form -->
+<br>
+<label for="capitalize">Capitalize the 🍕 Words: </label>
+<input type="checkbox" id="capitalize" unchecked aria-label="Capitalize Words"> <!-- Checkbox to toggle word capitalization -->
+<br>
+<label for="length">Number of 🍕 Words: </label>
+<input type="number" id="length" min="1" value="5" aria-label="Number of Words"> <!-- Input to specify the number of words in the passphrase -->
+<br>
+<label for="separator">Separator of 🍕 Words: </label>
+<input type="text" id="separator" value="🍕" aria-label="Separator of Words"> <!-- Input to specify the separator character between words -->
+<br>
+<button onclick="generatePassphrase()" aria-label="Generate a Passphrase">Generate a 🍕 Passphrase</button> <!-- Button to generate a new passphrase -->
+<div id="passphrase-container">
+  <button id="copy-button" onclick="copyToClipboard()" aria-label="Copy to Clipboard">Copy to Clipboard</button> <!-- Button to copy the passphrase to the clipboard -->
+  <div id="passphrase">Your 🍕 passphrase will appear here.</div> <!-- Display area for the generated passphrase -->
+  <div id="copy-confirmation">🍕 Passphrase Copied to Clipboard!</div> <!-- Confirmation message displayed after copying -->
+</div>
+<script>
+let originalButtonText = ''; // Variable to store the original button text for later use
+
+function generatePassphrase() {
+  // Array of words to use in the passphrase
+  const words = [
+    // pizza edition wordlist:
+    // eat at pizzeria bianco
+"alfredo", "anchovies", "arugula", "artichokes", "bacon", "basil", "barbecue", "beef", "bianco", "broccoli", "buffalo", "cheddar", "cheese", "chicken", "chicago", "corn", "crust", "cutter", "dough", "detroit", "eggplant", "fennel", "feta", "fire", "garlic", "gouda", "ham", "jalapenos", "local", "marinara", "margherita", "meatballs", "mozzarella", "mushrooms", "neapolitan", "newyork", "oil", "olives", "onions", "oregano", "oven", "parmesan", "peel", "pepperoni", "peppers", "pesto", "pineapple", "pizza", "pizzeria", "prosciutto", "red", "ricotta", "rosa", "rosemary", "salami", "sauce", "sausage", "sicilian", "spinach", "stone", "sun-dried", "thyme", "tomatoes", "truffle", "wiseguy", "wood", "zucchini"
+    // END OF WORDLIST
+  ];
+
+  // Get values from input fields
+  const length = parseInt(document.getElementById("length").value);
+  const capitalize = document.getElementById("capitalize").checked;
+  const separator = document.getElementById("separator").value;
+
+  // Validate the length input
+  if (isNaN(length) || length <= 0) {
+    alert("I'm sorry Dave, I'm afraid I can't do that.\nPlease, enter a valid 🍕 passphrase length."); // Error message for invalid length
+    return;
+  }
+
+  let passphraseArray = []; // Array to hold the words of the passphrase
+  
+  // Generate the passphrase word by word
+  for (let i = 0; i < length; i++) {
+    const randomIndex = getRandomInt(0, words.length - 1); // Get a random index from the word list
+    const word = capitalize ? capitalizeWord(words[randomIndex]) : words[randomIndex]; // Capitalize the word if the option is checked
+    passphraseArray.push(word); // Add the word to the passphrase array
+  }
+
+  // Add a random 5-digit number to the passphrase
+  const randomNumbers = getRandomInt(0, 99999).toString().padStart(5, '0');
+  passphraseArray.push(randomNumbers);
+
+  // Join the words and number into a single string, separated by the chosen separator
+  const passphrase = passphraseArray.join(separator);
+
+  // Display the generated passphrase in the HTML element
+  document.getElementById("passphrase").textContent = passphrase;
+
+  // Update the copy button text with the length of the passphrase
+  updateCopyButton(passphrase);
+}
+
+function getRandomInt(min, max) {
+  const cryptoArray = new Uint32Array(1); // Create a typed array for cryptographically secure random numbers
+  window.crypto.getRandomValues(cryptoArray); // Fill the array with random values
+  return Math.floor(min + (cryptoArray[0] / (0xFFFFFFFF + 1)) * (max - min + 1)); // Return a random integer between min and max
+}
+
+function capitalizeWord(word) {
+  return word.charAt(0).toUpperCase() + word.slice(1); // Capitalize the first letter of a word
+}
+
+function copyToClipboard() {
+  const passphraseElement = document.getElementById("passphrase"); // Get the passphrase element
+  const passphraseText = passphraseElement.textContent; // Get the text content of the passphrase
+
+  // Create a temporary input element to copy the text
+  const tempInput = document.createElement("input");
+  document.body.appendChild(tempInput);
+  tempInput.value = passphraseText;
+  tempInput.select();
+  tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+  // Execute the copy command
+  try {
+    document.execCommand("copy");
+    showCopyConfirmation(); // Show confirmation message after copying
+  } catch (err) {
+    console.error('Failed to copy text: ', err);
+  }
+
+  // Remove the temporary input element
+  document.body.removeChild(tempInput);
+}
+
+function showCopyConfirmation() {
+  const copyButton = document.getElementById("copy-button"); // Get the copy button element
+  const copyConfirmation = document.getElementById("copy-confirmation"); // Get the copy confirmation element
+
+  copyConfirmation.style.display = 'block'; // Show the confirmation message
+
+  // Hide the confirmation message after 2.6 seconds
+  setTimeout(() => {
+    copyConfirmation.style.display = 'none';
+    copyButton.textContent = originalButtonText; // Restore the original button text
+  }, 2600);
+  
+  originalButtonText = copyButton.textContent; // Store the original button text
+  copyButton.textContent = 'Passphrase Copied to Clipboard!'; // Change the button text to indicate success
+}
+
+function updateCopyButton(passphraseText) {
+  const characterCount = passphraseText.length; // Get the length of the passphrase
+  const copyButton = document.getElementById("copy-button"); // Get the copy button element
+  
+  // Update the button text with the passphrase length
+  originalButtonText = `Copy ${characterCount} 🍕 Characters to the Clipboard`;
+  copyButton.textContent = originalButtonText;
+}
+
+function resetForm() {
+  // Reset input fields to their default values
+  document.getElementById("capitalize").checked = false;
+  document.getElementById("length").value = 5;
+  document.getElementById("separator").value = "🍕";
+
+  // Generate a new passphrase with default settings
+  generatePassphrase();
+}
+</script>
+</body>
+</html>
